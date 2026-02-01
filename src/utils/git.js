@@ -1,25 +1,28 @@
 import { execa } from 'execa';
 import ora from 'ora';
 import chalk from 'chalk';
+import fs from 'fs-extra';
+import path from 'path';
 
-export async function installDependencies(projectPath, answers) {
-  const spinner = ora('Installing dependencies... (this may take a minute)').start();
-  
-  const pm = answers.packageManager;
-  const installCmd = pm === 'npm' ? 'install' : pm === 'yarn' ? 'install' : 'install';
+export async function initializeGit(projectPath) {
+  const spinner = ora('Initializing git repository...').start();
   
   try {
-    await execa(pm, [installCmd], {
+    // Check if git is available
+    await execa('git', ['--version']);
+    
+    // Initialize git repo
+    await execa('git', ['init'], { cwd: projectPath });
+    
+    // Create initial commit
+    await execa('git', ['add', '.'], { cwd: projectPath });
+    await execa('git', ['commit', '-m', 'Initial commit from create-frontend-app'], { 
       cwd: projectPath,
       stdio: 'pipe'
     });
     
-    spinner.succeed('Dependencies installed successfully');
+    spinner.succeed('Git repository initialized');
   } catch (error) {
-    spinner.fail('Failed to install dependencies');
-    console.error(chalk.red('Error:'), error.message);
-    console.log(chalk.yellow('\nYou can manually install dependencies later by running:'));
-    console.log(chalk.cyan(`  cd ${answers.projectName}`));
-    console.log(chalk.cyan(`  ${pm} install`));
+    spinner.warn('Git initialization skipped (git not found)');
   }
 }
