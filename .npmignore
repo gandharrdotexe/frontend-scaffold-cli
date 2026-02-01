@@ -1,0 +1,23 @@
+# Source files
+src/
+
+# Tests
+tests/
+*.test.js
+*.spec.js
+
+# Development
+.vscode/
+.idea/
+
+# Documentation
+docs/
+
+# Git
+.git/
+.gitignore
+
+# Misc
+*.log
+.DS_Store
+coverage/
