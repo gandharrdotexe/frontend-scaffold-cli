@@ -918,8 +918,7 @@ Want to help? Check our [Contributing Guide](#-contributing)!
 
 <div align="center">
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/create-frontend-app?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/create-frontend-app?style=social)
+![GitHub stars](https://img.shields.io/github/stars/gandharrdotexe/frontend-scaffold-cli?style=social)
 ![npm downloads](https://img.shields.io/npm/dm/create-frontend-app?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues/yourusername/create-frontend-app?style=flat-square)
 
