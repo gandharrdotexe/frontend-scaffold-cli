@@ -25,13 +25,8 @@ async function initializeShadcn(projectPath, answers) {
   const spinner = ora('Setting up shadcn/ui...').start();
   
   try {
-    // Add a basic button component
-    const buttonCode = `import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-
-import { cn } from "@/lib/utils"
-
+    // Shared: the cva() call that is identical in both TS and JS
+    const cvaBlock = `
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
@@ -60,7 +55,18 @@ const buttonVariants = cva(
     },
   }
 )
+`;
 
+    let buttonCode;
+
+    if (answers.typescript) {
+      // ── TypeScript version: type imports, interface, typed forwardRef ──
+      buttonCode = `import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+${cvaBlock}
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -83,6 +89,31 @@ Button.displayName = "Button"
 
 export { Button, buttonVariants }
 `;
+    } else {
+      // ── JavaScript version: no type imports, no interface, plain forwardRef ──
+      buttonCode = `import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+${cvaBlock}
+const Button = React.forwardRef(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }
+`;
+    }
 
     await fs.writeFile(
       path.join(projectPath, 'src/components/ui/button.' + (answers.typescript ? 'tsx' : 'jsx')),

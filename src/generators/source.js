@@ -246,10 +246,21 @@ export function generateSourceFiles(answers) {
   }
   
   function generateShadcnUtils(answers) {
-    return `import { type ClassValue, clsx } from "clsx"
+    if (answers.typescript) {
+      return `import { type ClassValue, clsx } from "clsx"
   import { twMerge } from "tailwind-merge"
   
-  export function cn(...inputs${answers.typescript ? ': ClassValue[]' : ''}) {
+  export function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs))
+  }
+  `;
+    }
+  
+    // JavaScript: no type keyword, no type annotation on the parameter
+    return `import { clsx } from "clsx"
+  import { twMerge } from "tailwind-merge"
+  
+  export function cn(...inputs) {
     return twMerge(clsx(inputs))
   }
   `;
