@@ -920,7 +920,7 @@ Want to help? Check our [Contributing Guide](#-contributing)!
 
 ![GitHub stars](https://img.shields.io/github/stars/gandharrdotexe/frontend-scaffold-cli?style=social)
 ![npm downloads](https://img.shields.io/npm/dm/create-frontend-app?style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/create-frontend-app?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/gandharrdotexe/frontend-scaffold-cli?style=flat-square)
 
 </div>
 
